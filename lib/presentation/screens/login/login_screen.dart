@@ -80,7 +80,7 @@ class LoginView extends StatelessWidget {
                         height: 320,
                         top: 100,
                         child: FadeInUp(
-                          duration: const Duration(seconds: 0),
+                          duration: const Duration(seconds: 1),
                           child: Container(
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
@@ -102,7 +102,7 @@ class LoginView extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       FadeInUp(
-                          duration: const Duration(milliseconds: 0),
+                          duration: const Duration(milliseconds: 1800),
                           child: Container(
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -178,7 +178,7 @@ class LoginView extends StatelessWidget {
                         height: 30,
                       ),
                       FadeInUp(
-                        duration: const Duration(milliseconds: 0),
+                        duration: const Duration(milliseconds: 1900),
                         child: ElevatedButton(
                           onPressed: () => {
                             // SplashScreen
@@ -219,7 +219,7 @@ class LoginView extends StatelessWidget {
                         height: 70,
                       ),
                       FadeInUp(
-                          duration: const Duration(milliseconds: 0),
+                          duration: const Duration(milliseconds: 2000),
                           child: const Text(
                             "version 1.0.0",
                             style: TextStyle(

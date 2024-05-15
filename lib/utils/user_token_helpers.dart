@@ -78,52 +78,6 @@ class UserTokenSharedPreferences {
     }
   }
 
-  /// Mehotd tto save cui number
-  /// This method is used to save the CUI number of the user
-  static Future<bool> saveValueCuiNumber(int cuiNumber) async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return await prefs.setString(
-          AppConstants.preferencesCuiNumber, cuiNumber.toString());
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to save full name
-  /// This method is used to save the full name of the user
-  static Future<bool> saveValueFullName(String fullName) async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return await prefs.setString(AppConstants.preferencesFullName, fullName);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to save id user
-  static Future<bool> saveValueUserId(int userId) async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return await prefs.setInt(AppConstants.preferencesUserId, userId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  static Future<bool> saveValueIdFormFamilySheet(int familySheetId) async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-      return await prefs.setInt(
-          AppConstants.preferencesFormFamilySheetId, familySheetId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   /* =============================================================== */
   /* ============================= GET ============================= */
 
@@ -177,54 +131,6 @@ class UserTokenSharedPreferences {
       prefs = await SharedPreferences.getInstance();
 
       return prefs.getString(AppConstants.preferencesTokenRequestDateTime);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to get cui number
-  /// This method is used to get the CUI number of the user
-  static Future<String?> getSavedCuiNumber() async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return prefs.getString(AppConstants.preferencesCuiNumber);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to get full name
-  /// This method is used to get the full name of the user
-  static Future<String?> getSavedFullName() async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return prefs.getString(AppConstants.preferencesFullName);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to get user id
-  /// This method is used to get the full name of the user
-  static Future<int?> getSavedUserId() async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return prefs.getInt(AppConstants.preferencesUserId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  /// Method to get id form1
-  /// This method is used to get the full name of the user
-  static Future<int?> getSavedIdFormFamilySheet() async {
-    try {
-      prefs = await SharedPreferences.getInstance();
-
-      return prefs.getInt(AppConstants.preferencesFormFamilySheetId);
     } catch (e) {
       rethrow;
     }

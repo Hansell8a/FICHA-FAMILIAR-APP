@@ -1,8 +1,4 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_boiler/presentation/blocs/family_sheet/family_sheet_bloc.dart';
-import 'package:flutter_boiler/presentation/blocs/family_sheet_form1/family_sheet_form1_bloc.dart';
 import 'package:flutter_boiler/presentation/screens/family_sheet/views/family_sheet_form1.dart';
 import 'package:flutter_boiler/presentation/screens/family_sheet/views/family_sheet_form2.dart';
 import 'package:flutter_boiler/presentation/screens/family_sheet/views/family_sheet_form3.dart';
@@ -56,40 +52,10 @@ class _FamilySheetState extends State<FamilySheet> {
       _isLoading = true;
     });
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isLoading = false;
       });
-
-      // if (currentIndex == 0) {
-      //   final state = context.read<FamilySheetForm1Bloc>().state;
-      //   context
-      //       .read<FamilySheetForm1Bloc>()
-      //       .add(ValidateFamilySheetForm1Event());
-      //   if (state.isValidForm1) {
-      //     context
-      //         .read<FamilySheetForm1Bloc>()
-      //         .add(const CreateFamilySheetForm1Event());
-      //   } else {
-      //     _showSnackBar(context);
-      //     return;
-      //   }
-      // }
-
-      if (currentIndex == 1) {
-        // final state = context.read<FamilySheetBloc>().state;
-        // context
-        //     .read<FamilySheetForm1Bloc>()
-        //     .add(ValidateFamilySheetForm1Event());
-        // if (state.isValidForm1) {
-        context.read<FamilySheetBloc>().add(const CreateFamilySheetForm2Event());
-        // } else {
-        //   _showSnackBar(context);
-        //   return;
-        // }
-      }
-
-
       goToNextView();
     });
   }
@@ -126,12 +92,25 @@ class _FamilySheetState extends State<FamilySheet> {
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.green))
                     : CustomButton(
-                        onTap: () => _handleButtonTap(),
+                        onTap: _handleButtonTap,
                         text: _isLoading ? "Guardando..." : "Siguiente >",
                         color: _isLoading ? Colors.green : mainText,
                       ),
               ),
             ),
+
+          // Expanded(
+          //   child: Container(
+          //     margin: const EdgeInsets.symmetric(horizontal: 100),
+          //     child: CustomButton(
+          //       onTap: () {
+          //         goToNextView();
+          //       },
+          //       text: "Siguiente >",
+          //       color: mainText,
+          //     ),
+          //   ),
+          // ),
           if (currentIndex == views.length - 1)
             Expanded(
               child: Container(
@@ -154,46 +133,5 @@ class _FamilySheetState extends State<FamilySheet> {
         ],
       ),
     );
-  }
-
-  // SnackBar
-  void _showSnackBar(BuildContext context) {
-    String msg = "";
-
-    // state
-    final state = context.read<FamilySheetForm1Bloc>().state;
-    if (state.catalogDepartmentSelected.id == 0) {
-      msg = "Necesita seleccionar un departamento";
-    } else if (state.catalogMunicipalitySelected.id == 0) {
-      msg = "Necesita seleccionar un municipio";
-    } else if (state.catalogPopulatedPlaceSelected.id == 0) {
-      msg = "Necesita seleccionar un lugar poblado";
-    } else if (state.catalogHealthAreaSelected.id == 0) {
-      msg = "Necesita seleccionar un área de salud";
-    } else if (state.catalogDistrictHealthSelected.id == 0) {
-      msg = "Necesita seleccionar un distrito de salud";
-    } else if (state.catalogTerritorySelected.id == 0) {
-      msg = "Necesita seleccionar un territorio";
-    } else if (state.catalogSectorSelected.id == 0) {
-      msg = "Necesita seleccionar un sector";
-  
-    }else if (state.address.isEmpty) {
-      msg = "Necesita una direccion";
-    }
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Alerta!',
-        message: msg,
-        contentType: ContentType.warning,
-      ),
-    );
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
   }
 }

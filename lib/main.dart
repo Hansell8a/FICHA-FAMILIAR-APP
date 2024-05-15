@@ -23,7 +23,6 @@ Future main() async {
             ..add(const FamilySheetTypeHousingEvent()),
         ),
         BlocProvider.value(value: serviceLocator<FamilySheetForm1Bloc>()),
-        BlocProvider.value(value: serviceLocator<FamilySheetBloc>()),
       ],
       child: const MyApp(),
     ),
@@ -39,8 +38,7 @@ class MyApp extends StatelessWidget {
       // supportedLocales: AppLocalizationsSetup.supportedLocales,
       // localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
       // locale: localeBloc.state.locale,
-      // theme dark
-      // theme: ThemeData.dark(),
+      // theme: LightTheme().theme(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Boilerplate',
       routerConfig: AppRouter.appRouter,

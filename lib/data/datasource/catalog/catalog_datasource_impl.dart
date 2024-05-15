@@ -3,22 +3,18 @@ import 'package:flutter_boiler/config/get_it/service_locator.dart';
 import 'package:flutter_boiler/data/models/catalog_model.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_Model_garbage_treatment.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_animal_type.dart';
-import 'package:flutter_boiler/data/models/catalogs/catalog_model_community.dart';
-import 'package:flutter_boiler/data/models/catalogs/catalog_model_community_center.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_department.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_district_health.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_floor_material.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_health_area.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_health_area_by_region.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_health_service_use.dart';
-import 'package:flutter_boiler/data/models/catalogs/catalog_model_housing_equipment.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_kitchen_fountain.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_kitchen_location.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_kitchen_type.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_municipality.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_populated_place.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_sanitary_service.dart';
-import 'package:flutter_boiler/data/models/catalogs/catalog_model_sector.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_service_description.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_tenancy_housing.dart';
 import 'package:flutter_boiler/data/models/catalogs/catalog_model_territory.dart';
@@ -28,8 +24,6 @@ import 'package:flutter_boiler/data/models/catalogs/catalog_model_water_consumpt
 import 'package:flutter_boiler/domain/datasource/catalog/catalog_datasource.dart';
 import 'package:flutter_boiler/domain/entities/catalog_entity.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_animal_type.dart';
-import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community.dart';
-import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community_center.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_department.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_district_health.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_floor_material.dart';
@@ -37,14 +31,12 @@ import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_garbage_t
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area_by_region.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_service_use.dart';
-import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_housing_equipment.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_fountain.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_location.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_type.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_municipality.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_populated_place.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sanitary_service.dart';
-import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sector.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_service_description.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_tenancy_housing.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_territory.dart';
@@ -694,7 +686,8 @@ class CatalogDatasourceImpl extends CatalogDataSource {
 
       final Response<dynamic> response =
           await HttpClientHelper(dio).requestHelper(
-        endpoint: '/area-salud?id_departamento=$idDepartment',
+        endpoint:
+            '/area-salud?id_region=$idRegion&id_departamento=$idDepartment',
         typeOfRequests: TypeRequests.get,
         token: token,
       );
@@ -733,8 +726,7 @@ class CatalogDatasourceImpl extends CatalogDataSource {
       final Response<dynamic> response =
           await HttpClientHelper(dio).requestHelper(
         endpoint:
-            '/distrito-salud?id_as=$idAs',
-            // '/distrito-salud',
+            '/distrito-salud?id_as=$idAs&id_departamento=$idDepartment&id_municipio=$idMunicipality',
         typeOfRequests: TypeRequests.get,
         token: token,
       );
@@ -764,7 +756,6 @@ class CatalogDatasourceImpl extends CatalogDataSource {
   }
 
 // {{url}}/descripcion-servicio?id_as=200701000029&id_ds=200701000013&id_departamento=2&id_municipio=1
-/// Repasar
   @override
   Future<List<CatalogEntityServiceDescription>> getCatalogHealthAreaByService(
       int idAs, int idDs, int idDepartment, int idMunicipality) async {
@@ -774,8 +765,7 @@ class CatalogDatasourceImpl extends CatalogDataSource {
       final Response<dynamic> response =
           await HttpClientHelper(dio).requestHelper(
         endpoint:
-            // '/descripcion-servicio?id_departamento=$idDepartment&id_municipio=$idMunicipality&id_ds=$idDs&id_as=$idAs',
-            '/descripcion-servicio?&id_ds=$idDs',
+            '/descripcion-servicio?id_as=$idAs&id_ds=$idDs&id_departamento=$idDepartment&id_municipio=$idMunicipality',
         typeOfRequests: TypeRequests.get,
         token: token,
       );
@@ -815,8 +805,7 @@ class CatalogDatasourceImpl extends CatalogDataSource {
 
       final Response<dynamic> response =
           await HttpClientHelper(dio).requestHelper(
-        // endpoint: '/territorio&id_as=$idAs&id_ds=$idDs&id_ts=$idTs',
-        endpoint: '/territorio?id_as=$idAs&id_ts=$idTs',
+        endpoint: '/territorio?id_as=$idAs&id_ds=$idDs&id_ts=$idTs',
         typeOfRequests: TypeRequests.get,
         token: token,
       );
@@ -838,161 +827,6 @@ class CatalogDatasourceImpl extends CatalogDataSource {
                 ))
             .toList();
         return entitiesHealthArea;
-      } else {
-        throw Exception('Failed to load catalog');
-      }
-    } catch (e) {
-      throw Exception('$e');
-    }
-  }
-
-  // getCatalogSector
-  // {{url}}/sector?id_territorio=3
-  @override
-  Future<List<CatalogEntitySector>> getCatalogSector(int idTerritory) async {
-    try {
-      String? token = await UserTokenSharedPreferences.getSavedAuthToken();
-
-      final Response<dynamic> response =
-          await HttpClientHelper(dio).requestHelper(
-        endpoint: '/sector?id_territorio=$idTerritory',
-        typeOfRequests: TypeRequests.get,
-        token: token,
-      );
-
-      if (response.statusCode == 200) {
-        final CatalogModelSector typeSector =
-            CatalogModelSector.fromJson(response.data);
-
-        List<CatalogEntitySector> entities = typeSector.data
-            .map((e) => CatalogEntitySector(
-                  idSector: e.idSector,
-                  descripcion: e.descripcion,
-                  idTerritorio: e.idTerritorio,
-                  estadoRegistro: e.estadoRegistro,
-                  idUsuarioRegistro: e.idUsuarioRegistro,
-                  fechaRegistro: e.fechaRegistro,
-                ))
-            .toList();
-        return entities;
-      } else {
-        throw Exception('Failed to load catalog');
-      }
-    } catch (e) {
-      throw Exception('$e');
-    }
-  }
-
-  // getCatalogCommunityCenter
-  // {{url}}/centro-comunitario?id_ts=3
-  /// Este esta filtrado MAL
-  /// Repasar
-  @override
-  Future<List<CatalogEntityCommunityCenter>> getCatalogCommunityCenter(
-      int idTs, int idDs, int idAs) async {
-    try {
-      String? token = await UserTokenSharedPreferences.getSavedAuthToken();
-
-      final Response<dynamic> response =
-          await HttpClientHelper(dio).requestHelper(
-        endpoint: '/centro-comunitario?id_ts=$idTs',
-        typeOfRequests: TypeRequests.get,
-        token: token,
-      );
-
-      if (response.statusCode == 200) {
-        final CatalogModelCommunityCenter typeCommunityCenter =
-            CatalogModelCommunityCenter.fromJson(response.data);
-
-        List<CatalogEntityCommunityCenter> entities = typeCommunityCenter.data
-            .map((e) => CatalogEntityCommunityCenter(
-                  idAs: e.idAs,
-                  idDs: e.idDs,
-                  idTs: e.idTs,
-                  idCc: e.idCc,
-                  nombre: e.nombre,
-                  activa: e.activa,
-                ))
-            .toList();
-        return entities;
-      } else {
-        throw Exception('Failed to load catalog');
-      }
-    } catch (e) {
-      throw Exception('$e');
-    }
-  }
-
-  // getCatalogCommunity
-  @override
-  Future<List<CatalogEntityCommunity>> getCatalogCommunity(int idDepartamento,
-      int idMunicipio, int idLp, int idAs, int idDs, int idTs, int idCc) async {
-    try {
-      String? token = await UserTokenSharedPreferences.getSavedAuthToken();
-
-      final Response<dynamic> response =
-          await HttpClientHelper(dio).requestHelper(
-        endpoint:
-            '/comunidad?id_as=$idAs&id_ds=$idDs&id_ts=$idTs',
-        typeOfRequests: TypeRequests.get,
-        token: token,
-      );
-
-      if (response.statusCode == 200) {
-        final CatalogModelCommunity typeCommunityCenter =
-            CatalogModelCommunity.fromJson(response.data);
-
-        List<CatalogEntityCommunity> entities = typeCommunityCenter.data
-            .map((e) => CatalogEntityCommunity(
-                  idAs: e.idAs,
-                  idDs: e.idDs,
-                  idTs: e.idTs,
-                  idCc: e.idCc,
-                  idC: e.idC,
-                  idDepartamento: e.idDepartamento,
-                  idMunicipio: e.idMunicipio,
-                  idLp: e.idLp,
-                  nombre: e.nombre,
-                  activa: e.activa,
-                ))
-            .toList();
-        return entities;
-      } else {
-        throw Exception('Failed to load catalog');
-      }
-    } catch (e) {
-      throw Exception('$e');
-    }
-  }
-
-// {{url}}/equipamiento-vivienda
-  @override
-  Future<List<CatalogEntityHousingEquipment>> getCatalogHousingEquipment() async {
-    try {
-      String? token = await UserTokenSharedPreferences.getSavedAuthToken();
-
-      final Response<dynamic> response =
-          await HttpClientHelper(dio).requestHelper(
-        // endpoint: '/equipamiento-vivienda',
-        endpoint: '/equipamiento-vivienda',
-        typeOfRequests: TypeRequests.get,
-        token: token,
-      );
-
-      if (response.statusCode == 200) {
-        final CatalogModelHousingEquipment typeHousingEquipment =
-            CatalogModelHousingEquipment.fromJson(response.data);
-
-        List<CatalogEntityHousingEquipment> entities = typeHousingEquipment.data
-            .map((e) => CatalogEntityHousingEquipment(
-                  idEquipamientoVivienda: e.idEquipamientoVivienda,
-                  descripcion: e.descripcion,
-                  estadoRegistro: e.estadoRegistro,
-                  idUsuarioRegistro: e.idUsuarioRegistro,
-                  fechaRegistro: e.fechaRegistro,
-                ))
-            .toList();
-        return entities;
       } else {
         throw Exception('Failed to load catalog');
       }
