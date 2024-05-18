@@ -32,16 +32,9 @@ class FamilySheetForm2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<OptionCatalogModel> optionsViviendaHabitada = [
-      OptionCatalogModel(id: 0, value: 'Vivienda habitada'),
-      OptionCatalogModel(id: 1, value: 'Si'),
-      OptionCatalogModel(id: 2, value: 'No'),
-    ];
-
-    List<OptionCatalogModel> optionsTipoVivienda = [
-      OptionCatalogModel(id: 0, value: 'La vivienda que ocupa es'),
-      OptionCatalogModel(id: 1, value: 'Casa'),
-      OptionCatalogModel(id: 2, value: 'Departamento'),
-      OptionCatalogModel(id: 3, value: 'Otro'),
+      const OptionCatalogModel(id: 0, value: 'Vivienda habitada'),
+      const OptionCatalogModel(id: 1, value: 'Si'),
+      const OptionCatalogModel(id: 2, value: 'No'),
     ];
 
     return Scaffold(
@@ -66,26 +59,53 @@ class FamilySheetForm2View extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CustomSelectWidget(
-                      selectedOption:
-                          OptionCatalogModel(id: 0, value: 'Vivienda habitada'),
+                      isRequired: true,
+                      title: "Vivienda habitada",
+                      selectedOption: const OptionCatalogModel(
+                          id: 0, value: 'Vivienda habitada'),
                       options: optionsViviendaHabitada,
                       initialValue: 0,
                       onChanged: (value) {
                         // ignore: avoid_print
-                        print('Selected option: $value');
+                        context.read<FamilySheetBloc>().add(
+                              ChangeHousingInhabitedEvent(
+                                optionsViviendaHabitada.firstWhere(
+                                  (element) => element.id == value,
+                                ),
+                              ),
+                            );
                       },
                     ),
                   ),
                   const SizedBox(width: 10), // Espacio entre los inputs
                   Expanded(
-                    child: CustomSelectWidget(
-                      options: optionsTipoVivienda,
-                      selectedOption: OptionCatalogModel(
-                          id: 0, value: 'La vivienda que ocupa es'),
-                      initialValue: 0,
-                      onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                    child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
+                      builder: (context, state) {
+                        List<OptionCatalogModel> options = [
+                          const OptionCatalogModel(
+                              id: 0, value: 'La vivienda tiene'),
+                          ...state.catalogTenancyHousing.map((e) =>
+                              OptionCatalogModel(
+                                  id: e.idTenenciaVivienda,
+                                  value: e.descripcion))
+                        ];
+
+                        return CustomSelectWidget(
+                          title: "La vivienda que ocupa es",
+                          options: options,
+                          initialValue: 0,
+                          selectedOption: const OptionCatalogModel(
+                              id: 0, value: 'La vivienda que ocupa es'),
+                          onChanged: (value) {
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeHousingOccupiedEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
+                          },
+                        );
                       },
                     ),
                   ),
@@ -100,7 +120,8 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(id: 0, value: 'Vivienda habitada'),
+                          const OptionCatalogModel(
+                              id: 0, value: 'Vivienda habitada'),
                           ...state.catalog.map((housingStatus) =>
                               OptionCatalogModel(
                                   id: housingStatus.idTipoVivienda,
@@ -108,42 +129,25 @@ class FamilySheetForm2View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
-                          selectedOption: OptionCatalogModel(
+                          title: "Tipo de vivienda",
+                          selectedOption: const OptionCatalogModel(
                               id: 0, value: 'Tipo de vivienda'),
                           options: options,
                           initialValue: 0,
                           onChanged: (value) {
-                            // context.read<FamilySheetBloc>().add(
-                            //       UpdatedFamilySheetEvent(value),
-                            //     );
+                            context.read().add(
+                                  ChangeTypeHousingEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
                     ),
                   ),
-                  const SizedBox(width: 10), // Espacio entre los inputs
-                  // Expanded(
-                  //   child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
-                  //     builder: (context, state) {
-                  //       List<OptionCatalogModel> options = [
-                  //         OptionCatalogModel(id: 0, value: 'Municipio ubicación'),
-                  //         ...state.catalogMunicipality.map((municipality) =>
-                  //             OptionCatalogModel(id: municipality.idMunicipio,
-                  //                 value: municipality.nombre))
-                  //       ];
-
-                  //       return CustomSelectWidget(
-                  //         options: options,
-                  //         selectedOption: OptionCatalogModel(id: 0, value: 'Municipio ubicación'),
-                  //         initialValue: 0,
-                  //         onChanged: (value) {
-                  //           // ignore: avoid_print
-                  //           print('Selected option: $value');
-                  //         },
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
+                  const SizedBox(width: 10),
                 ],
               ),
             ),
@@ -155,7 +159,8 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(id: 0, value: 'Barrio ubicación'),
+                          const OptionCatalogModel(
+                              id: 0, value: 'Material de piso'),
                           ...state.catalogFloorMaterial.map((neighborhood) =>
                               OptionCatalogModel(
                                   id: neighborhood.idMaterialPiso,
@@ -164,12 +169,18 @@ class FamilySheetForm2View extends StatelessWidget {
 
                         return CustomSelectWidget(
                           options: options,
-                          selectedOption: OptionCatalogModel(
-                              id: 0, value: 'Barrio ubicación'),
+                          title: "Material de piso",
+                          selectedOption: const OptionCatalogModel(
+                              id: 0, value: 'Material de piso'),
                           initialValue: 0,
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeNeighborhoodEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -180,7 +191,7 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(
+                          const OptionCatalogModel(
                               id: 0, value: 'Tipo de servicio sanitario'),
                           ...state.catalogSanitaryService.map((housingType) =>
                               OptionCatalogModel(
@@ -191,11 +202,11 @@ class FamilySheetForm2View extends StatelessWidget {
                         return CustomSelectWidget(
                           options: options,
                           initialValue: 0,
-                          selectedOption: OptionCatalogModel(
-                              id: 0, value: 'Tipo de servicio sanitario'),
+                          title: "Tipo de servicio sanitario",
+                          selectedOption: const OptionCatalogModel(id: 0, value: 'Tipo de servicio sanitario'),
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            final OptionCatalogModel selectedOption = options.firstWhere((element) => element.id == value);
+                            context.read<FamilySheetBloc>().add(ChangeSanitaryEvent(selectedOption));
                           },
                         );
                       },
@@ -212,7 +223,8 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(id: 0, value: 'Agua consumo'),
+                          const OptionCatalogModel(
+                              id: 0, value: 'Agua consumo'),
                           ...state.catalogWaterConsumption.map((wallMaterial) =>
                               OptionCatalogModel(
                                   id: wallMaterial.idAbastecimientoAgua,
@@ -221,12 +233,18 @@ class FamilySheetForm2View extends StatelessWidget {
 
                         return CustomSelectWidget(
                           options: options,
-                          selectedOption:
-                              OptionCatalogModel(id: 0, value: 'Agua consumo'),
+                          title: "Agua consumo",
+                          selectedOption: const OptionCatalogModel(
+                              id: 0, value: 'Agua consumo'),
                           initialValue: 0,
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeWaterConsumeEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -237,7 +255,8 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(id: 0, value: 'El sanitario es'),
+                          const OptionCatalogModel(
+                              id: 0, value: 'El sanitario es'),
                           ...state.catalogHealthServiceUse.map((wallMaterial) =>
                               OptionCatalogModel(
                                   id: wallMaterial.idUsoServicioSanitario,
@@ -247,11 +266,22 @@ class FamilySheetForm2View extends StatelessWidget {
                         return CustomSelectWidget(
                           options: options,
                           initialValue: 0,
-                          selectedOption: OptionCatalogModel(
-                              id: 0, value: 'El sanitario es'),
+                          title: "El sanitario es",
+                          selectedOption: state.typeHealthServiceUse ==
+                                  const OptionCatalogModel.empty()
+                              ? options[0]
+                              : state.typeHealthServiceUse,
                           onChanged: (value) {
                             // ignore: avoid_print
                             print('Selected option: $value');
+                            final selectedOption = options.firstWhere(
+                              (element) => element.id == value,
+                            );
+
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeTypeHealthServiceUseEvent(
+                                      selectedOption),
+                                );
                           },
                         );
                       },
@@ -266,7 +296,7 @@ class FamilySheetForm2View extends StatelessWidget {
                 child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                   builder: (context, state) {
                     List<OptionCatalogModel> options = [
-                      OptionCatalogModel(
+                      const OptionCatalogModel(
                           id: 0, value: 'Agua residuales / Aguas servidas'),
                       ...state.catalogWasteWater.map((e) => OptionCatalogModel(
                           id: e.idTratamientoAguaResidual,
@@ -276,11 +306,17 @@ class FamilySheetForm2View extends StatelessWidget {
                     return CustomSelectWidget(
                       options: options,
                       initialValue: 0,
-                      selectedOption: OptionCatalogModel(
+                      title: "Agua residuales / Aguas servidas",
+                      selectedOption: const OptionCatalogModel(
                           id: 0, value: 'Agua residuales / Aguas servidas'),
                       onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                        context.read<FamilySheetBloc>().add(
+                              ChangeWasteWaterEvent(
+                                options.firstWhere(
+                                  (element) => element.id == value,
+                                ),
+                              ),
+                            );
                       },
                     );
                   },
@@ -293,7 +329,7 @@ class FamilySheetForm2View extends StatelessWidget {
                 child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                   builder: (context, state) {
                     List<OptionCatalogModel> options = [
-                      OptionCatalogModel(
+                      const OptionCatalogModel(
                           id: 0, value: 'Tratamiento de consumo de la basura'),
                       ...state.catalogGarbageTreatment.map((e) =>
                           OptionCatalogModel(
@@ -303,11 +339,17 @@ class FamilySheetForm2View extends StatelessWidget {
                     return CustomSelectWidget(
                       options: options,
                       initialValue: 0,
-                      selectedOption: OptionCatalogModel(
+                      title: "Tratamiento de consumo de la basura",
+                      selectedOption: const OptionCatalogModel(
                           id: 0, value: 'Tratamiento de consumo de la basura'),
                       onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                        context.read<FamilySheetBloc>().add(
+                              ChangeGarbageTreatmentEvent(
+                                options.firstWhere(
+                                  (element) => element.id == value,
+                                ),
+                              ),
+                            );
                       },
                     );
                   },
@@ -320,20 +362,29 @@ class FamilySheetForm2View extends StatelessWidget {
                 child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                   builder: (context, state) {
                     List<OptionCatalogModel> options = [
-                      OptionCatalogModel(id: 0, value: 'La vivienda tiene'),
-                      ...state.catalogTenancyHousing.map((e) =>
+                      const OptionCatalogModel(
+                          id: 0, value: 'La vivienda tiene'),
+                      ...state.catalogHousingEquipment.map((e) =>
                           OptionCatalogModel(
-                              id: e.idTenenciaVivienda, value: e.descripcion))
+                              id: e.idEquipamientoVivienda,
+                              value: e.descripcion))
                     ];
 
                     return CustomSelectWidget(
+                      // Mover 2
                       options: options,
                       initialValue: 0,
-                      selectedOption:
-                          OptionCatalogModel(id: 0, value: 'La vivienda tiene'),
+                      title: "La vivienda tiene",
+                      selectedOption: const OptionCatalogModel(
+                          id: 0, value: 'La vivienda tiene'),
                       onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                        context.read<FamilySheetBloc>().add(
+                              ChangeHousingHasEvent(
+                                options.firstWhere(
+                                  (element) => element.id == value,
+                                ),
+                              ),
+                            );
                       },
                     );
                   },
@@ -348,7 +399,7 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(
+                          const OptionCatalogModel(
                               id: 0, value: 'Fuente de combustible cocinar'),
                           ...state.cataloKitchenFountain.map((e) =>
                               OptionCatalogModel(
@@ -357,12 +408,18 @@ class FamilySheetForm2View extends StatelessWidget {
 
                         return CustomSelectWidget(
                           options: options,
+                          title: "Fuente de combustible cocinar",
                           initialValue: 0,
-                          selectedOption: OptionCatalogModel(
+                          selectedOption: const OptionCatalogModel(
                               id: 0, value: 'Fuente de combustible cocinar'),
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeFuelSourceEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -373,7 +430,7 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(
+                          const OptionCatalogModel(
                               id: 0, value: 'Ubicación de la cocina'),
                           ...state.catalogKitchenLocation.map((e) =>
                               OptionCatalogModel(
@@ -384,11 +441,17 @@ class FamilySheetForm2View extends StatelessWidget {
                         return CustomSelectWidget(
                           options: options,
                           initialValue: 0,
-                          selectedOption: OptionCatalogModel(
+                          title: "Ubicación de la cocina",
+                          selectedOption: const OptionCatalogModel(
                               id: 0, value: 'Ubicación de la cocina'),
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeKitchenLocationEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -405,7 +468,8 @@ class FamilySheetForm2View extends StatelessWidget {
                     child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
                       builder: (context, state) {
                         List<OptionCatalogModel> options = [
-                          OptionCatalogModel(id: 0, value: 'Tipo de cocina'),
+                          const OptionCatalogModel(
+                              id: 0, value: 'Tipo de cocina'),
                           ...state.catalogKitchenType.map((e) =>
                               OptionCatalogModel(
                                   id: e.idTipoCocina, value: e.descripcion))
@@ -413,12 +477,18 @@ class FamilySheetForm2View extends StatelessWidget {
 
                         return CustomSelectWidget(
                           options: options,
+                          title: "Tipo de cocina",
                           initialValue: 0,
-                          selectedOption: OptionCatalogModel(
+                          selectedOption: const OptionCatalogModel(
                               id: 0, value: 'Tipo de cocina'),
                           onChanged: (value) {
-                            // ignore: avoid_print
-                            print('Selected option: $value');
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeKitchenTypeEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -428,7 +498,11 @@ class FamilySheetForm2View extends StatelessWidget {
                   Expanded(
                     child: CostomTextFormFild(
                       hint: 'Numero de familia que vive',
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        context.read<FamilySheetBloc>().add(
+                              ChangeNumberFamiliesEvent(value as int),
+                            );
+                      },
                     ),
                   ),
                 ],
@@ -439,19 +513,30 @@ class FamilySheetForm2View extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomSelectWidget(
-                      selectedOption: const OptionCatalogModel(
-                          id: 0, value: 'Recp con agua reposada'),
-                      // Boleandos SI y NO
-                      options: const [
-                        OptionCatalogModel(
-                            id: 1, value: 'SI'),
-                        OptionCatalogModel(id: 2, value: 'NO'),
-                      ],
-                      initialValue: 0,
-                      onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                    child: BlocBuilder<FamilySheetBloc, FamilySheetState>(
+                      builder: (context, state) {
+                        List<OptionCatalogModel> options = [
+                          const OptionCatalogModel(
+                              id: 0, value: 'Recp con agua reposada'),
+                          const OptionCatalogModel(id: 1, value: 'SI'),
+                          const OptionCatalogModel(id: 2, value: 'NO'),
+                        ];
+
+                        return CustomSelectWidget(
+                          selectedOption: options[0],
+                          title: "Recp con agua reposada",
+                          options: options,
+                          initialValue: 0,
+                          onChanged: (value) {
+                            context.read<FamilySheetBloc>().add(
+                                  ChangeRestedWaterEvent(
+                                    options.firstWhere(
+                                      (element) => element.id == value,
+                                    ),
+                                  ),
+                                );
+                          },
+                        );
                       },
                     ),
                   ),
@@ -459,7 +544,39 @@ class FamilySheetForm2View extends StatelessWidget {
                   Expanded(
                     child: CostomTextFormFild(
                       hint: 'No de personas que viven',
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        context.read<FamilySheetBloc>().add(
+                              ChangeNumberPeopleEvent(value as int),
+                            );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 40),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CostomTextFormFild(
+                      hint: 'Cantidad de dormitorios',
+                      onChanged: (value) {
+                        context.read<FamilySheetBloc>().add(
+                              ChangeNumberBedroomsEvent(value as int),
+                            );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: CostomTextFormFild(
+                      hint: 'Cantidad de cuartos',
+                      onChanged: (value) {
+                        context.read<FamilySheetBloc>().add(
+                              ChangeNumberRoomsEvent(value as int),
+                            );
+                      },
                     ),
                   ),
                 ],

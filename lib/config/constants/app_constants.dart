@@ -6,4 +6,8 @@ class AppConstants {
   static String preferencesRefreshTokenExpiration = 'refreshTokenExpiration';
   static String preferencesTokenExpiration = 'tokenExpiration';
   static String preferencesTokenRequestDateTime = 'tokenRequestDate';
+  static String preferencesCuiNumber = 'cuiNumber';
+  static String preferencesFullName = 'fullName';
+  static String preferencesUserId = 'userId';
+  static String preferencesFormFamilySheetId = 'formFamilySheetId';
 }

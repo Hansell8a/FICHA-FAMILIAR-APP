@@ -1,6 +1,1 @@
-import 'package:flutter_boiler/config/local_db/connection/sqlite_connection.dart';
-
-abstract class FamilySheetLocalRepository {
-  Future<void> createFamilySheetTable(
-      FamilySheetDataFormCompanion familySheetDataForm);
-}
+// TODO Implement this library.

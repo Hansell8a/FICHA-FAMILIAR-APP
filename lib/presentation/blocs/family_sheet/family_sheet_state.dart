@@ -15,7 +15,7 @@ class FamilySheetState extends Equatable {
     this.catalogWaterConsumption = const [],
     this.typeWaterConsumption = '',
     this.catalogHealthServiceUse = const [],
-    this.typeHealthServiceUse = '',
+    this.typeHealthServiceUse = const OptionCatalogModel.empty(),
     this.catalogWasteWater = const [],
     this.typeWasteWater = '',
     this.catalogGarbageTreatment = const [],
@@ -32,6 +32,33 @@ class FamilySheetState extends Equatable {
     this.typeAnimalType = '',
     this.typeDepartment = '',
     this.typeMunicipality = '',
+    this.catalogHousingEquipment = const [],
+
+    this.numberFamiliesLiving = 0,
+    this.numberPersonsLiving = 0,
+    this.cantDormitories = 0,
+    this.cantRooms = 0,
+    
+
+    /// Campos del formulario
+    this.typeHousing = const OptionCatalogModel.empty(),
+    this.neighborhood = const OptionCatalogModel.empty(),
+    this.waterConsume = const OptionCatalogModel.empty(),
+    this.sanitary = const OptionCatalogModel.empty(),
+    this.wasteWater = const OptionCatalogModel.empty(),
+    this.garbageTreatment = const OptionCatalogModel.empty(),
+    this.housingHas = const OptionCatalogModel.empty(),
+    this.fuelSource = const OptionCatalogModel.empty(),
+    this.kitchenLocation = const OptionCatalogModel.empty(),
+    this.kitchenType = const OptionCatalogModel.empty(),
+    // Agua reposasda 
+    this.restedWater = const OptionCatalogModel.empty(),
+    // Vivienda habitada
+    this.housingInhabited = const OptionCatalogModel.empty(),
+    // Vivienda ocupada
+    this.housingOccupied = const OptionCatalogModel.empty(),
+    // Equipamiento de la vivienda
+    this.housingEquipped = const OptionCatalogModel.empty(),
   });
 
   final List<CatalogEntity> catalog;
@@ -48,7 +75,8 @@ class FamilySheetState extends Equatable {
   final List<CatalogEntityKitchenLocation> catalogKitchenLocation;
   final List<CatalogEntityKitchenType> catalogKitchenType;
   final List<CatalogEntityAnimalType> catalogAnimalType;
-  
+  // housingEquipment
+  final List<CatalogEntityHousingEquipment> catalogHousingEquipment;
 
   final String housingType;
   final String typeWallMaterial;
@@ -56,7 +84,7 @@ class FamilySheetState extends Equatable {
   final String typeFloorMaterial;
   final String typeSanitaryService;
   final String typeWaterConsumption;
-  final String typeHealthServiceUse;
+  final OptionCatalogModel typeHealthServiceUse;
   final String typeWasteWater;
   final String typeGarbageTreatment;
   final String typeTenancyHousing;
@@ -66,6 +94,26 @@ class FamilySheetState extends Equatable {
   final String typeAnimalType;
   final String typeDepartment;
   final String typeMunicipality;
+  final int numberFamiliesLiving;
+  final int numberPersonsLiving;
+  final int cantDormitories;
+  final int cantRooms;
+
+  /// Campos del formulario
+  final OptionCatalogModel typeHousing;
+  final OptionCatalogModel neighborhood;
+  final OptionCatalogModel waterConsume;
+  final OptionCatalogModel sanitary;
+  final OptionCatalogModel wasteWater;
+  final OptionCatalogModel garbageTreatment;
+  final OptionCatalogModel housingHas;
+  final OptionCatalogModel fuelSource;
+  final OptionCatalogModel kitchenLocation;
+  final OptionCatalogModel kitchenType;
+  final OptionCatalogModel restedWater;
+  final OptionCatalogModel housingInhabited;
+  final OptionCatalogModel housingOccupied;
+  final OptionCatalogModel housingEquipped;
 
   FamilySheetState copyWith({
     List<CatalogEntity>? catalog,
@@ -81,7 +129,7 @@ class FamilySheetState extends Equatable {
     List<CatalogEntityWaterConsumption>? catalogWaterConsumption,
     String? typeWaterConsumption,
     List<CatalogEntityHealthServiceUse>? catalogHealthServiceUse,
-    String? typeHealthServiceUse,
+    OptionCatalogModel? typeHealthServiceUse,
     List<CatalogEntityWasteWater>? catalogWasteWater,
     String? typeWasteWater,
     List<CatalogEntityGarbageTreatment>? catalogGarbageTreatment,
@@ -100,6 +148,28 @@ class FamilySheetState extends Equatable {
     String? typeDepartment,
     List<CatalogEntityMunicipality>? catalogMunicipality,
     String? typeMunicipality,
+    List<CatalogEntityHousingEquipment>? catalogHousingEquipment,
+
+    int? numberFamiliesLiving,
+    int? numberPersonsLiving,
+    int? cantDormitories,
+    int? cantRooms,
+
+    /// Campos del formulario
+    OptionCatalogModel? typeHousing,
+    OptionCatalogModel? neighborhood,
+    OptionCatalogModel? waterConsume,
+    OptionCatalogModel? sanitary,
+    OptionCatalogModel? wasteWater,
+    OptionCatalogModel? garbageTreatment,
+    OptionCatalogModel? housingHas,
+    OptionCatalogModel? fuelSource,
+    OptionCatalogModel? kitchenLocation,
+    OptionCatalogModel? kitchenType,
+    OptionCatalogModel? restedWater,
+    OptionCatalogModel? housingInhabited,
+    OptionCatalogModel? housingOccupied,
+    OptionCatalogModel? housingEquipped,
   }) {
     return FamilySheetState(
       catalog: catalog ?? this.catalog,
@@ -139,6 +209,27 @@ class FamilySheetState extends Equatable {
       typeAnimalType: typeAnimalType ?? this.typeAnimalType,
       typeDepartment: typeDepartment ?? this.typeDepartment,
       typeMunicipality: typeMunicipality ?? this.typeMunicipality,
+
+      /// Campos del formulario
+      typeHousing: typeHousing ?? this.typeHousing,
+      neighborhood: neighborhood ?? this.neighborhood,
+      waterConsume: waterConsume ?? this.waterConsume,
+      sanitary: sanitary ?? this.sanitary,
+      wasteWater: wasteWater ?? this.wasteWater,
+      garbageTreatment: garbageTreatment ?? this.garbageTreatment,
+      housingHas: housingHas ?? this.housingHas,
+      fuelSource: fuelSource ?? this.fuelSource,
+      kitchenLocation: kitchenLocation ?? this.kitchenLocation,
+      kitchenType: kitchenType ?? this.kitchenType,
+      restedWater: restedWater ?? this.restedWater,
+      housingInhabited: housingInhabited ?? this.housingInhabited,
+      catalogHousingEquipment: catalogHousingEquipment ?? this.catalogHousingEquipment,
+      housingEquipped: housingEquipped ?? this.housingEquipped,
+
+      numberFamiliesLiving: numberFamiliesLiving ?? this.numberFamiliesLiving,
+      numberPersonsLiving: numberPersonsLiving ?? this.numberPersonsLiving,
+      cantDormitories: cantDormitories ?? this.cantDormitories,
+      cantRooms: cantRooms ?? this.cantRooms,
     );
   }
 
@@ -174,5 +265,27 @@ class FamilySheetState extends Equatable {
         typeAnimalType,
         typeDepartment,
         typeMunicipality,
+
+        /// Campos del formulario
+        typeHousing,
+        neighborhood,
+        waterConsume,
+        sanitary,
+        wasteWater,
+        garbageTreatment,
+        housingHas,
+        fuelSource,
+        kitchenLocation,
+        kitchenType,
+        restedWater,
+        housingInhabited,
+        housingOccupied,
+        catalogHousingEquipment,
+        housingEquipped,
+
+        numberFamiliesLiving,
+        numberPersonsLiving,
+        cantDormitories,
+        cantRooms,
       ];
 }

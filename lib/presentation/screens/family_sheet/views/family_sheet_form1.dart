@@ -21,8 +21,15 @@ class _FamilySheetForm1State extends State<FamilySheetForm1> {
   @override
   void initState() {
     super.initState();
+    _loadCatalogs();
+  }
 
-    context.read<FamilySheetForm1Bloc>().add(LoadCatalogDepartmentEvent());
+  Future<void> _loadCatalogs() async {
+    await Future.wait([
+      context.read<FamilySheetForm1Bloc>().add(LoadCatalogDepartmentEvent()),
+      context.read<FamilySheetForm1Bloc>().add(GetCuiNumberEvent()),
+      context.read<FamilySheetForm1Bloc>().add(GetFullNameEvent()),
+    ] as Iterable<Future>);
   }
 
   @override
@@ -58,10 +65,19 @@ class FamilySheetForm1View extends StatelessWidget {
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 40),
-              child: CostomTextFormFild(
-                hint: 'Direccion',
-                prefixIcon: Icons.location_city,
-                onChanged: (value) {},
+              child: BlocBuilder<FamilySheetForm1Bloc, FamilySheetForm1State>(
+                builder: (context, state) {
+                  return CostomTextFormFild(
+                    hint: 'Direccion',
+                    prefixIcon: Icons.location_city,
+                    initialValue: state.address.isEmpty ? "" : state.address,
+                    onChanged: (value) {
+                      context.read<FamilySheetForm1Bloc>().add(
+                            SaveAddressEvent(value),
+                          );
+                    },
+                  );
+                },
               ),
             ),
             Container(
@@ -82,6 +98,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Departamento',
                           selectedOption: state.catalogDepartmentSelected ==
                                   const OptionCatalogModel.empty()
                               ? departmentOptions[0]
@@ -120,6 +138,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Municipio',
                           selectedOption: state.catalogMunicipalitySelected ==
                                   const OptionCatalogModel.empty()
                               ? municipalityOptions[0]
@@ -166,7 +186,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
-                          // options: const ['Area de salud', 'Managua', 'León'],
+                          isRequired: true,
+                          title: 'Lugar poblado',
                           selectedOption: state.catalogPopulatedPlaceSelected ==
                                   const OptionCatalogModel.empty()
                               ? optionSelected[0]
@@ -209,6 +230,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Area de salud',
                           options: optionSelected,
                           initialValue: 0,
                           selectedOption: state.catalogHealthAreaSelected ==
@@ -217,7 +240,6 @@ class FamilySheetForm1View extends StatelessWidget {
                               : state.catalogHealthAreaSelected,
                           onChanged: (value) {
                             // ignore: avoid_print
-                            print('Selected option: $value');
                             final OptionCatalogModel optionSelectedLPD =
                                 optionSelected.firstWhere(
                                     (element) => element.id == value);
@@ -258,6 +280,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Distrito de salud',
                           options: optionSelected,
                           initialValue: 0,
                           selectedOption: state.catalogDistrictHealthSelected ==
@@ -299,12 +323,15 @@ class FamilySheetForm1View extends StatelessWidget {
                           const OptionCatalogModel(
                               id: 0, value: 'Descripcion del servicio'),
                           ...state.catalogServiceDescription.map(
-                              (serviceDescription) => OptionCatalogModel(
-                                  id: serviceDescription.idDs,
-                                  value: serviceDescription.nombre))
+                            (serviceDescription) => OptionCatalogModel(
+                                id: serviceDescription.idTs,
+                                value: serviceDescription.nombre),
+                          )
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Descripcion del servicio',
                           options: optionSelected,
                           initialValue: 0,
                           selectedOption:
@@ -356,6 +383,8 @@ class FamilySheetForm1View extends StatelessWidget {
                         ];
 
                         return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Territorio',
                           options: optionSelected,
                           initialValue: 0,
                           selectedOption: state.catalogTerritorySelected ==
@@ -373,12 +402,9 @@ class FamilySheetForm1View extends StatelessWidget {
                                 ChangeHealthAreaByTerritoryForm1Event(
                                     optionSelectedTerritoy));
 
-                            // context.read<FamilySheetForm1Bloc>().add(
-                            //       LoadCatalogHealthAreaByTerritoryEvent(
-                            //           state.catalogHealthAreaSelected.id,
-                            //           state.catalogDepartmentSelected.id,
-                            //           value),
-                            //     );
+                            context.read<FamilySheetForm1Bloc>().add(
+                                  LoadCatalogSectorEvent(value),
+                                );
                           },
                         );
                       },
@@ -386,17 +412,45 @@ class FamilySheetForm1View extends StatelessWidget {
                   ),
                   const SizedBox(width: 10), // Espacio entre los inputs
                   Expanded(
-                    child: CustomSelectWidget(
-                      options: List<OptionCatalogModel>.generate(
-                          10,
-                          (index) =>
-                              OptionCatalogModel(id: index, value: 'Sector')),
-                      initialValue: 0,
-                      selectedOption:
+                    child: BlocBuilder<FamilySheetForm1Bloc,
+                        FamilySheetForm1State>(
+                      builder: (context, state) {
+                        List<OptionCatalogModel> optionSelected = [
                           const OptionCatalogModel(id: 0, value: 'Sector'),
-                      onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                          ...state.catalogSector.map((sector) =>
+                              OptionCatalogModel(
+                                  id: sector.idSector,
+                                  value: sector.descripcion))
+                        ];
+
+                        return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Sector',
+                          options: optionSelected,
+                          initialValue: 0,
+                          selectedOption: state.catalogSectorSelected ==
+                                  const OptionCatalogModel.empty()
+                              ? optionSelected[0]
+                              : state.catalogSectorSelected,
+                          onChanged: (value) {
+                            // ignore: avoid_print
+                            final OptionCatalogModel communityCenter =
+                                optionSelected.firstWhere(
+                                    (element) => element.id == value);
+
+                            context
+                                .read<FamilySheetForm1Bloc>()
+                                .add(ChangeSectorForm1Event(communityCenter));
+
+                            context.read<FamilySheetForm1Bloc>().add(
+                              // descripcion del servicio
+                              // healthAreaByService
+                                  LoadCatalogCommunityCenterEvent(value,
+                                      state.catalogDistrictHealthSelected.id,
+                                      state.catalogServiceDescriptionSelected.id),
+                                );
+                          },
+                        );
                       },
                     ),
                   ),
@@ -408,33 +462,86 @@ class FamilySheetForm1View extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomSelectWidget(
-                      options: List<OptionCatalogModel>.generate(
-                          10,
-                          (index) => OptionCatalogModel(
-                              id: index, value: 'Centro comunitario')),
-                      initialValue: 0,
-                      selectedOption: const OptionCatalogModel(
-                          id: 0, value: 'Centro comunitario'),
-                      onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                    child: BlocBuilder<FamilySheetForm1Bloc,
+                        FamilySheetForm1State>(
+                      builder: (context, state) {
+                        List<OptionCatalogModel> optionSelected = [
+                          const OptionCatalogModel(
+                              id: 0, value: 'Centro comunitario'),
+                          ...state.catalogCommunityCenter.map(
+                              (communityCenter) => OptionCatalogModel(
+                                  id: communityCenter.idCc,
+                                  value: communityCenter.nombre))
+                        ];
+
+                        return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Centro comunitario',
+                          options: optionSelected,
+                          initialValue: 0,
+                          selectedOption:
+                              state.catalogCommunityCenterSelected ==
+                                      const OptionCatalogModel.empty()
+                                  ? optionSelected[0]
+                                  : state.catalogCommunityCenterSelected,
+                          onChanged: (value) {
+                            // ignore: avoid_print
+                            context.read<FamilySheetForm1Bloc>().add(
+                                  ChangeCommunityCenterForm1Event(
+                                      optionSelected.firstWhere(
+                                          (element) => element.id == value)),
+                                );
+
+                            // context.read<FamilySheetForm1Bloc>().add(
+                            //       LoadCatalogCommunityCenterEvent(value),
+                            //     );
+
+                            context.read<FamilySheetForm1Bloc>().add(
+                                  LoadCatalogCommunityEvent(
+                                    state.catalogDepartmentSelected.id,
+                                    state.catalogMunicipalitySelected.id,
+                                    state.catalogPopulatedPlaceSelected.id,
+                                    state.catalogHealthAreaSelected.id,
+                                    state.catalogDistrictHealthSelected.id,
+                                    state.catalogTerritorySelected.id,
+                                    value,
+                                  ),
+                                );
+                          },
+                        );
                       },
                     ),
                   ),
                   const SizedBox(width: 10), // Espacio entre los inputs
                   Expanded(
-                    child: CustomSelectWidget(
-                      options: List<OptionCatalogModel>.generate(
-                          10,
-                          (index) => OptionCatalogModel(
-                              id: index, value: 'Comunidad')),
-                      initialValue: 0,
-                      selectedOption:
+                    child: BlocBuilder<FamilySheetForm1Bloc,
+                        FamilySheetForm1State>(
+                      builder: (context, state) {
+                        List<OptionCatalogModel> optionSelected = [
                           const OptionCatalogModel(id: 0, value: 'Comunidad'),
-                      onChanged: (value) {
-                        // ignore: avoid_print
-                        print('Selected option: $value');
+                          ...state.catalogCommunity.map((community) =>
+                              OptionCatalogModel(
+                                  id: community.idC, value: community.nombre))
+                        ];
+
+                        return CustomSelectWidget(
+                          isRequired: true,
+                          title: 'Comunidad',
+                          options: optionSelected,
+                          initialValue: 0,
+                          selectedOption: state.catalogComunitySelected ==
+                                  const OptionCatalogModel.empty()
+                              ? optionSelected[0]
+                              : state.catalogComunitySelected,
+                          onChanged: (value) {
+                            final OptionCatalogModel community = optionSelected
+                                .firstWhere((element) => element.id == value);
+
+                            context
+                                .read<FamilySheetForm1Bloc>()
+                                .add(ChangeCommunityForm1Event(community));
+                          },
+                        );
                       },
                     ),
                   ),
@@ -460,10 +567,18 @@ class FamilySheetForm1View extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: CostomTextFormFild(
-                      hint: 'CUI',
-                      prefixIcon: Icons.person,
-                      onChanged: (value) {},
+                    child: BlocBuilder<FamilySheetForm1Bloc,
+                        FamilySheetForm1State>(
+                      builder: (context, state) {
+                        return CostomTextFormFild(
+                          hint: 'CUI',
+                          prefixIcon: Icons.person,
+                          onChanged: (value) {},
+                          initialValue: 'CUI: ${state.cuiNumber}',
+                          enabled: false,
+                          suffixIcon: Icons.block,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -474,18 +589,18 @@ class FamilySheetForm1View extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: CostomTextFormFild(
-                      hint: 'Nombres',
-                      prefixIcon: Icons.person,
-                      onChanged: (value) {},
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: CostomTextFormFild(
-                      hint: 'Apellidos',
-                      prefixIcon: Icons.person,
-                      onChanged: (value) {},
+                    child: BlocBuilder<FamilySheetForm1Bloc,
+                        FamilySheetForm1State>(
+                      builder: (context, state) {
+                        return CostomTextFormFild(
+                          hint: '',
+                          prefixIcon: Icons.person,
+                          initialValue: 'Nombre completo: ${state.fullName}',
+                          enabled: false,
+                          suffixIcon: Icons.block,
+                          onChanged: (value) {},
+                        );
+                      },
                     ),
                   ),
                 ],

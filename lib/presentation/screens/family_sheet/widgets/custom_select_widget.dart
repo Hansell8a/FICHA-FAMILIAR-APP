@@ -1,79 +1,70 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boiler/data/models/options_catalog_model.dart';
-import 'package:flutter_boiler/presentation/screens/home/utils/colors.dart';
 
 class CustomSelectWidget extends StatelessWidget {
-
   const CustomSelectWidget({
     Key? key,
     required this.options,
     required this.initialValue,
     this.onChanged,
+    this.title,
     required this.selectedOption,
+    this.isRequired = false,
   }) : super(key: key);
 
   final List<OptionCatalogModel> options;
   final int initialValue;
   final ValueChanged<int>? onChanged;
+  final String? title;
   final OptionCatalogModel selectedOption;
+  final bool isRequired; // Nuevo atributo para indicar si el campo es requerido
 
   @override
   Widget build(BuildContext context) {
+    List<String> optionValues = options.map((option) => option.value).toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: mainText, width: 1),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: Row(
-            children: [
-              Expanded(
-                child: DropdownButton<OptionCatalogModel>(
-                  // value: selectedOption,
-                  hint: Text(
-                    selectedOption.value,
-                    style: const TextStyle(
-                      fontFamily: "Inter",
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title != null) // Verifica si se proporcionó un título
+            Row(
+              children: [
+                Text(
+                  title!, // Utiliza el título proporcionado
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                if (isRequired)
+                  const Text(
+                    '*', // Muestra un asterisco si el campo es requerido
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
                     ),
                   ),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  elevation: 16,
-                  iconSize: 40,
-                  isExpanded: true,
-                  style: const TextStyle(color: mainText),
-                  underline: const SizedBox(),
-                  onChanged: (OptionCatalogModel? newValue) {
-                    
-                      if (onChanged != null) {
-                        onChanged!(newValue!.id);
-                      }
-
-                  },
-                  items: options.map<DropdownMenuItem<OptionCatalogModel>>((OptionCatalogModel option) {
-                    return DropdownMenuItem<OptionCatalogModel>(
-                      value: option,
-                      child: Text(
-                        option.value,
-                        style: const TextStyle(
-                          color: mainText,
-                          fontFamily: "Inter",
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
+              ],
+            ),
+          DropdownSearch<String>(
+            items: optionValues,
+            popupProps: const PopupProps.menu(
+              showSearchBox: true,
+              title: Text('Seleccione una opción'),
+            ),
+            onChanged: (String? selectedValue) {
+              if (onChanged != null) {
+                int selectedIndex = options
+                    .indexWhere((option) => option.value == selectedValue);
+                onChanged!(options[selectedIndex].id);
+              }
+            },
+            selectedItem: selectedOption.value,
           ),
-        ),
+        ],
       ),
     );
   }

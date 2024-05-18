@@ -1,5 +1,7 @@
 import 'package:flutter_boiler/domain/entities/catalog_entity.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_animal_type.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community_center.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_department.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_district_health.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_floor_material.dart';
@@ -7,12 +9,14 @@ import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_garbage_t
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area_by_region.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_service_use.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_housing_equipment.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_fountain.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_location.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_type.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_municipality.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_populated_place.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sanitary_service.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sector.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_service_description.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_tenancy_housing.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_territory.dart';
@@ -36,6 +40,7 @@ abstract class CatalogDataSource {
   Future<List<CatalogEntityKitchenType>> getCatalogKitchenType();
   Future<List<CatalogEntityAnimalType>> getCatalogAnimalType();
   Future<List<CatalogEntityDepartment>> getCatalogDepartment();
+  Future<List<CatalogEntityHousingEquipment>> getCatalogHousingEquipment();
   // {{url}}/municipio?id_departamento=2
   Future<List<CatalogEntityMunicipality>> getCatalogMunicipality(
       int idDepartment);
@@ -54,4 +59,15 @@ abstract class CatalogDataSource {
   // {{url}}/territorio?id_as=200501000016&id_ds=200501000016&id_ts=200501000005
   Future<List<CatalogEntityTerritory>> getCatalogHealthAreaByTerritory(
       int idAs, int idDs, int idTs);
+
+  // {{url}}/sector?id_territorio=3
+  Future<List<CatalogEntitySector>> getCatalogSector(int idTerritory);
+
+  // {{url}}/centro-comunitario?id_ts=202300000001
+  Future<List<CatalogEntityCommunityCenter>> getCatalogCommunityCenter(
+      int idTs, int idAs, int idDs);
+
+  // {{url}}/comunidad?id_cc=200501000005
+  Future<List<CatalogEntityCommunity>> getCatalogCommunity(int idDepartamento,
+      int idMunicipio, int idLp, int idAs, int idDs, int idTs, int idCc);
 }

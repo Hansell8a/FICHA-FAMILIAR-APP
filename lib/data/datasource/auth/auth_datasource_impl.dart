@@ -30,8 +30,11 @@ class AuthDataSourceImpl extends AuthDataSource {
 
       final AuthModel authModel = AuthModel.fromJson(response.data);
 
-      await UserTokenSharedPreferences.saveValueAuthToken(
-          authModel.data.tokenMovil);
+      await UserTokenSharedPreferences.saveValueAuthToken(authModel.data.tokenMovil);
+      await UserTokenSharedPreferences.saveValueCuiNumber(authModel.data.cui);
+      await UserTokenSharedPreferences.saveValueFullName(authModel.data.nombreCompleto);
+      await UserTokenSharedPreferences.saveValueUserId(authModel.data.idUsuario);
+      
     } catch (e) {
       rethrow;
     }

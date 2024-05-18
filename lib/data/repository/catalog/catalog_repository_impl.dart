@@ -1,6 +1,8 @@
 import 'package:flutter_boiler/domain/datasource/catalog/catalog_datasource.dart';
 import 'package:flutter_boiler/domain/entities/catalog_entity.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_animal_type.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_community_center.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_department.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_district_health.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_floor_material.dart';
@@ -8,12 +10,14 @@ import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_garbage_t
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_area_by_region.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_health_service_use.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_housing_equipment.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_fountain.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_location.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_kitchen_type.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_municipality.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_populated_place.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sanitary_service.dart';
+import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_sector.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_service_description.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_tenancy_housing.dart';
 import 'package:flutter_boiler/domain/entities/catalogs/catalog_entity_territory.dart';
@@ -225,6 +229,50 @@ class CatalogRepositoryImpl extends CatalogRepository {
     try {
       return await catalogDataSource.getCatalogHealthAreaByTerritory(
           idAs, idDs, idTs);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // {{url}}/sector?id_territorio=3
+  @override
+  Future<List<CatalogEntitySector>> getCatalogSector(int idTerritory) async {
+    try {
+      return await catalogDataSource.getCatalogSector(idTerritory);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // {{url}}/sector?id_territorio=3
+  @override
+  Future<List<CatalogEntityCommunityCenter>> getCatalogCommunityCenter(
+      int idTs, int idAs, int idDs) async {
+    try {
+      return await catalogDataSource.getCatalogCommunityCenter(
+          idTs, idAs, idDs);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Future<List<CatalogEntityCommunity>> getCatalogCommunity(int idDepartamento,
+  //     int idMunicipio, int idLp, int idAs, int idDs, int idTs, int idCc);
+  @override
+  Future<List<CatalogEntityCommunity>> getCatalogCommunity(int idDepartamento,
+      int idMunicipio, int idLp, int idAs, int idDs, int idTs, int idCc) async {
+    try {
+      return await catalogDataSource.getCatalogCommunity(
+          idDepartamento, idMunicipio, idLp, idAs, idDs, idTs, idCc);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CatalogEntityHousingEquipment>> getCatalogHousingEquipment() async {
+    try {
+      return await catalogDataSource.getCatalogHousingEquipment();
     } catch (e) {
       rethrow;
     }

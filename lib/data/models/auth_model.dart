@@ -34,6 +34,7 @@ class Data {
   String institution;
   List<Role> roles;
   String tokenMovil;
+  String nombreCompleto = "";
 
   Data({
     required this.idUsuario,
@@ -47,6 +48,7 @@ class Data {
     required this.institution,
     required this.roles,
     required this.tokenMovil,
+    required this.nombreCompleto,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -61,6 +63,7 @@ class Data {
         institution: json["institution"],
         roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
         tokenMovil: json["tokenMovil"],
+        nombreCompleto: json["nombreCompleto"],
       );
 }
 

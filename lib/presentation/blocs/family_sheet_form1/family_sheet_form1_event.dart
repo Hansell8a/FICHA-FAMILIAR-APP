@@ -136,3 +136,83 @@ class ChangeHealthAreaByTerritoryForm1Event extends FamilySheetForm1Event {
   @override
   List<Object> get props => [healthAreaByTerritory];
 }
+
+class LoadCatalogSectorEvent extends FamilySheetForm1Event {
+  final int territory;
+
+  const LoadCatalogSectorEvent(this.territory);
+
+  @override
+  List<Object> get props => [territory];
+}
+
+class ChangeSectorForm1Event extends FamilySheetForm1Event {
+  final OptionCatalogModel sector;
+
+  const ChangeSectorForm1Event(this.sector);
+
+  @override
+  List<Object> get props => [sector];
+}
+
+class LoadCatalogCommunityCenterEvent extends FamilySheetForm1Event {
+  final int ts, ds, as;
+
+  const LoadCatalogCommunityCenterEvent(this.ts, this.ds, this.as);
+
+  @override
+  List<Object> get props => [ts];
+}
+
+class ChangeCommunityCenterForm1Event extends FamilySheetForm1Event {
+  final OptionCatalogModel communityCenter;
+
+  const ChangeCommunityCenterForm1Event(this.communityCenter);
+
+  @override
+  List<Object> get props => [communityCenter];
+}
+
+// Future<List<CatalogEntityCommunity>> getCatalogCommunity(int idDepartamento,
+//       int idMunicipio, int idLp, int idAs, int idDs, int idTs, int idCc);
+class LoadCatalogCommunityEvent extends FamilySheetForm1Event {
+  final int idDepartamento, idMunicipio, idLp, idAs, idDs, idTs, idCc;
+
+  const LoadCatalogCommunityEvent(this.idDepartamento, this.idMunicipio,
+      this.idLp, this.idAs, this.idDs, this.idTs, this.idCc);
+
+  @override
+  List<Object> get props =>
+      [idDepartamento, idMunicipio, idLp, idAs, idDs, idTs, idCc];
+}
+
+class ChangeCommunityForm1Event extends FamilySheetForm1Event {
+  final OptionCatalogModel community;
+
+  const ChangeCommunityForm1Event(this.community);
+
+  @override
+  List<Object> get props => [community];
+}
+
+// Event get cui number
+class GetCuiNumberEvent extends FamilySheetForm1Event {}
+
+// Event get full name
+class GetFullNameEvent extends FamilySheetForm1Event {}
+
+class SaveAddressEvent extends FamilySheetForm1Event {
+  final String address;
+
+  const SaveAddressEvent(this.address);
+
+  @override
+  List<Object> get props => [address];
+}
+
+class CreateFamilySheetForm1Event extends FamilySheetForm1Event {
+  const CreateFamilySheetForm1Event();
+}
+
+// validation event
+class ValidateFamilySheetForm1Event extends FamilySheetForm1Event {}

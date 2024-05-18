@@ -78,6 +78,52 @@ class UserTokenSharedPreferences {
     }
   }
 
+  /// Mehotd tto save cui number
+  /// This method is used to save the CUI number of the user
+  static Future<bool> saveValueCuiNumber(int cuiNumber) async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+
+      return await prefs.setString(
+          AppConstants.preferencesCuiNumber, cuiNumber.toString());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to save full name
+  /// This method is used to save the full name of the user
+  static Future<bool> saveValueFullName(String fullName) async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+
+      return await prefs.setString(AppConstants.preferencesFullName, fullName);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to save id user
+  static Future<bool> saveValueUserId(int userId) async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+
+      return await prefs.setInt(AppConstants.preferencesUserId, userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<bool> saveValueIdFormFamilySheet(int familySheetId) async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      return await prefs.setInt(
+          AppConstants.preferencesFormFamilySheetId, familySheetId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /* =============================================================== */
   /* ============================= GET ============================= */
 
@@ -85,7 +131,7 @@ class UserTokenSharedPreferences {
   static Future<String?> getSavedAuthToken() async {
     try {
       prefs = await SharedPreferences.getInstance();
-
+      return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjEwMDQ4NCwidXNlcm5hbWUiOiJBUFAiLCJlbWFpbCI6bnVsbCwiY3VpIjoxNjU0MzQzNzYxNjA2LCJub21icmVzIjoiTHVpcyIsImFwZWxsaWRvcyI6IlhvbCIsImlkUHVlc3RvIjpudWxsLCJpZEluc3RpdHVjaW9uIjpudWxsLCJpZGFzIjpudWxsLCJpZGRzIjpudWxsLCJpZHRzIjpudWxsLCJpZFVuaWRhZEVqZWN1dG9yYSI6bnVsbCwiZXhwaXJhdGlvbiI6MTIwLCJmaXJzdExvZ2luIjpmYWxzZSwiaW5zdGl0dXRpb24iOiJFWFBFRElFTlRFIENMSU5JQ08iLCJyb2xlcyI6W3sicm9sIjoiRElHSVRBRE9SIC0gQVBQIE1PVklMIEVYUEVESUVOVEUgVkFDVU5BQ0lPTiBNT1ZJTCIsImlkUm9sIjo1Nywia2V5IjoiRElHX0VDX01PVklMIn1dLCJpYXQiOjE3MTUyNzE0Njh9.Q1YbPC-vEGveJR0wJY0EH-e84mTA7OPv5awU66llYyI";
       return prefs.getString(AppConstants.preferencesAuthToken);
     } catch (e) {
       rethrow;
@@ -131,6 +177,54 @@ class UserTokenSharedPreferences {
       prefs = await SharedPreferences.getInstance();
 
       return prefs.getString(AppConstants.preferencesTokenRequestDateTime);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to get cui number
+  /// This method is used to get the CUI number of the user
+  static Future<String?> getSavedCuiNumber() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      return "3003416440101";
+      //return prefs.getString(AppConstants.preferencesCuiNumber);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to get full name
+  /// This method is used to get the full name of the user
+  static Future<String?> getSavedFullName() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      return "CARLOS IVAN";
+      //return prefs.getString(AppConstants.preferencesFullName);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to get user id
+  /// This method is used to get the full name of the user
+  static Future<int?> getSavedUserId() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      return 12345;
+      //return prefs.getInt(AppConstants.preferencesUserId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Method to get id form1
+  /// This method is used to get the full name of the user
+  static Future<int?> getSavedIdFormFamilySheet() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+
+      return prefs.getInt(AppConstants.preferencesFormFamilySheetId);
     } catch (e) {
       rethrow;
     }
