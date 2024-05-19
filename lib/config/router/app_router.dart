@@ -21,7 +21,8 @@ class AppRouter {
       GoRoute(
         path: LoginScreen.path,
         name: LoginScreen.pathName,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => const LoginScreen(),
+        //builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: SplashScreen.path,

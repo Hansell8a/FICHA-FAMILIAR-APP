@@ -131,7 +131,7 @@ class UserTokenSharedPreferences {
   static Future<String?> getSavedAuthToken() async {
     try {
       prefs = await SharedPreferences.getInstance();
-      return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjEwMDQ4NCwidXNlcm5hbWUiOiJBUFAiLCJlbWFpbCI6bnVsbCwiY3VpIjoxNjU0MzQzNzYxNjA2LCJub21icmVzIjoiTHVpcyIsImFwZWxsaWRvcyI6IlhvbCIsImlkUHVlc3RvIjpudWxsLCJpZEluc3RpdHVjaW9uIjpudWxsLCJpZGFzIjpudWxsLCJpZGRzIjpudWxsLCJpZHRzIjpudWxsLCJpZFVuaWRhZEVqZWN1dG9yYSI6bnVsbCwiZXhwaXJhdGlvbiI6MTIwLCJmaXJzdExvZ2luIjpmYWxzZSwiaW5zdGl0dXRpb24iOiJFWFBFRElFTlRFIENMSU5JQ08iLCJyb2xlcyI6W3sicm9sIjoiRElHSVRBRE9SIC0gQVBQIE1PVklMIEVYUEVESUVOVEUgVkFDVU5BQ0lPTiBNT1ZJTCIsImlkUm9sIjo1Nywia2V5IjoiRElHX0VDX01PVklMIn1dLCJpYXQiOjE3MTUyNzE0Njh9.Q1YbPC-vEGveJR0wJY0EH-e84mTA7OPv5awU66llYyI";
+      //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjEwMDQ4NCwidXNlcm5hbWUiOiJBUFAiLCJlbWFpbCI6bnVsbCwiY3VpIjoxNjU0MzQzNzYxNjA2LCJub21icmVzIjoiTHVpcyIsImFwZWxsaWRvcyI6IlhvbCIsImlkUHVlc3RvIjpudWxsLCJpZEluc3RpdHVjaW9uIjpudWxsLCJpZGFzIjpudWxsLCJpZGRzIjpudWxsLCJpZHRzIjpudWxsLCJpZFVuaWRhZEVqZWN1dG9yYSI6bnVsbCwiZXhwaXJhdGlvbiI6MTIwLCJmaXJzdExvZ2luIjpmYWxzZSwiaW5zdGl0dXRpb24iOiJFWFBFRElFTlRFIENMSU5JQ08iLCJyb2xlcyI6W3sicm9sIjoiRElHSVRBRE9SIC0gQVBQIE1PVklMIEVYUEVESUVOVEUgVkFDVU5BQ0lPTiBNT1ZJTCIsImlkUm9sIjo1Nywia2V5IjoiRElHX0VDX01PVklMIn1dLCJpYXQiOjE3MTUyNzE0Njh9.Q1YbPC-vEGveJR0wJY0EH-e84mTA7OPv5awU66llYyI";
       return prefs.getString(AppConstants.preferencesAuthToken);
     } catch (e) {
       rethrow;
@@ -187,8 +187,8 @@ class UserTokenSharedPreferences {
   static Future<String?> getSavedCuiNumber() async {
     try {
       prefs = await SharedPreferences.getInstance();
-      return "3003416440101";
-      //return prefs.getString(AppConstants.preferencesCuiNumber);
+      //return "3003416440101";
+      return prefs.getString(AppConstants.preferencesCuiNumber);
     } catch (e) {
       rethrow;
     }
@@ -199,8 +199,8 @@ class UserTokenSharedPreferences {
   static Future<String?> getSavedFullName() async {
     try {
       prefs = await SharedPreferences.getInstance();
-      return "CARLOS IVAN";
-      //return prefs.getString(AppConstants.preferencesFullName);
+      //return "CARLOS IVAN";
+      return prefs.getString(AppConstants.preferencesFullName);
     } catch (e) {
       rethrow;
     }
@@ -211,8 +211,8 @@ class UserTokenSharedPreferences {
   static Future<int?> getSavedUserId() async {
     try {
       prefs = await SharedPreferences.getInstance();
-      return 12345;
-      //return prefs.getInt(AppConstants.preferencesUserId);
+      //return 12345;
+      return prefs.getInt(AppConstants.preferencesUserId);
     } catch (e) {
       rethrow;
     }
