@@ -11,5 +11,3 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
-
-# If you have build output directories you would like to ignore, you can

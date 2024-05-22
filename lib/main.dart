@@ -1,49 +1,52 @@
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+
+import 'package:app_vacunacion_movil/pages/core/persona_page.dart';
+import 'package:app_vacunacion_movil/pages/login_page.dart';
+import 'package:app_vacunacion_movil/pages/bienvenida_page.dart';
+import 'package:app_vacunacion_movil/pages/splash_page.dart';
+import 'package:app_vacunacion_movil/provider/core/persona_provider.dart';
+import 'package:app_vacunacion_movil/provider/login_provider.dart';
+import 'package:app_vacunacion_movil/routes/page_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_boiler/config/get_it/service_locator.dart';
-import 'package:flutter_boiler/config/router/app_router.dart';
-import 'package:flutter_boiler/presentation/blocs/family_sheet/family_sheet_bloc.dart';
-import 'package:flutter_boiler/presentation/blocs/family_sheet_form1/family_sheet_form1_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
-Future main() async {
-  // Load the .env file
-  if (!kReleaseMode) {
-    await dotenv.load(fileName: ".env.dev");
-  }
-
-  setUpServiceLocator();
-
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => serviceLocator<FamilySheetBloc>()
-            ..add(const FamilySheetTypeHousingEvent()),
-        ),
-        BlocProvider.value(value: serviceLocator<FamilySheetForm1Bloc>()),
-        BlocProvider.value(value: serviceLocator<FamilySheetBloc>()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+void main() {
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      // supportedLocales: AppLocalizationsSetup.supportedLocales,
-      // localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-      // locale: localeBloc.state.locale,
-      // theme dark
-      // theme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Boilerplate',
-      routerConfig: AppRouter.appRouter,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LoginProvider()),
+        ChangeNotifierProvider(create: (context) => PersonaProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        initialRoute: '/',
+        // initialRoute: '/login',
+        routes: {
+          PageRoutes.login: (context) => const LoginPage(),
+          PageRoutes.bienvenida: (_) => const BienvenidaPage(),
+          PageRoutes.personas: (_) => PersonaPage(),
+        },
+        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
+        home: SplashPage(),
+      ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
