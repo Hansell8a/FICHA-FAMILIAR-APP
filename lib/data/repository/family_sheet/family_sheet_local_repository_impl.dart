@@ -12,9 +12,12 @@ class FamilySheetLocalRepositoryImpl extends FamilySheetLocalRepository {
   Future<void> createFamilySheetTable(
       FamilySheetDataFormCompanion familySheetDataForm) async {
     try {
-      await familySheetLocalDatasource.createFamilySheetTable(familySheetDataForm);
+      await familySheetLocalDatasource
+          .createFamilySheetTable(familySheetDataForm);
     } catch (e) {
       rethrow;
     }
   }
 }
+
+class FamilySheetLocalRepository {}
